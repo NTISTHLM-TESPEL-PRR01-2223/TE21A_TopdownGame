@@ -6,6 +6,8 @@ Raylib.SetTargetFPS(60);
 Rectangle character = new Rectangle(0, 60, 50, 50);
 float speed = 4.5f;
 
+Texture2D avatarImage = Raylib.LoadTexture("avatar.png");
+
 //                       r   g    b    a
 Color myColor = new Color(0, 200, 30, 255);
 
@@ -15,12 +17,28 @@ while (Raylib.WindowShouldClose() == false)
   {
     character.x += speed;
   }
+  if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
+  {
+    character.x -= speed;
+  }
+  if (Raylib.IsKeyDown(KeyboardKey.KEY_S))
+  {
+    character.y += speed;
+  }
+  if (Raylib.IsKeyDown(KeyboardKey.KEY_W))
+  {
+    character.y -= speed;
+  }
 
   Raylib.BeginDrawing();
-
   Raylib.ClearBackground(Color.WHITE);
+  Raylib.DrawTexture(avatarImage,
+          (int)character.x,
+          (int)character.y,
+          Color.WHITE
+        );
 
-  Raylib.DrawRectangleRec(character, myColor);
+  // Raylib.DrawRectangleRec(character, myColor);
 
   // Raylib.DrawRectangle(0, 60, 50, 50, myColor);
   // Raylib.DrawRectangle(0, 70, 50, 50, Color.RED);
