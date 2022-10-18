@@ -8,40 +8,59 @@ float speed = 4.5f;
 
 Texture2D avatarImage = Raylib.LoadTexture("avatar.png");
 
-//                       r   g    b    a
+//                        r   g    b   a
 Color myColor = new Color(0, 200, 30, 255);
+
+string currentScene = "start"; // start, game, win, gameover
 
 while (Raylib.WindowShouldClose() == false)
 {
-  if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
+  // LOGIK
+
+  if (currentScene == "game")
   {
-    character.x += speed;
+    if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
+    {
+      character.x += speed;
+    }
+    if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
+    {
+      character.x -= speed;
+    }
+    if (Raylib.IsKeyDown(KeyboardKey.KEY_S))
+    {
+      character.y += speed;
+    }
+    if (Raylib.IsKeyDown(KeyboardKey.KEY_W))
+    {
+      character.y -= speed;
+    }
   }
-  if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
+  else if (currentScene == "start")
   {
-    character.x -= speed;
+    if (Raylib.IsKeyDown(KeyboardKey.KEY_ENTER))
+    {
+      currentScene = "game";
+    }
   }
-  if (Raylib.IsKeyDown(KeyboardKey.KEY_S))
-  {
-    character.y += speed;
-  }
-  if (Raylib.IsKeyDown(KeyboardKey.KEY_W))
-  {
-    character.y -= speed;
-  }
+
+  // GRAFIK
 
   Raylib.BeginDrawing();
   Raylib.ClearBackground(Color.WHITE);
-  Raylib.DrawTexture(avatarImage,
-          (int)character.x,
-          (int)character.y,
-          Color.WHITE
-        );
 
-  // Raylib.DrawRectangleRec(character, myColor);
-
-  // Raylib.DrawRectangle(0, 60, 50, 50, myColor);
-  // Raylib.DrawRectangle(0, 70, 50, 50, Color.RED);
+  if (currentScene == "game")
+  {
+    Raylib.DrawTexture(avatarImage,
+            (int)character.x,
+            (int)character.y,
+            Color.WHITE
+          );
+  }
+  else if (currentScene == "start")
+  {
+    Raylib.DrawText("Press ENTER to start", 315, 500, 32, myColor);
+  }
 
   Raylib.EndDrawing();
 }
