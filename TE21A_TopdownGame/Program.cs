@@ -1,8 +1,5 @@
 ﻿using Raylib_cs;
-
-// 1. Lägg in en snygg logga/bakgrund på startskärmen
-// 2. Lägg till en gameover-skärm som man kommer till om man går utanför skärmen
-// 3. Lägg till en "starta om"-knapp
+using System.Numerics;
 
 Raylib.InitWindow(1024, 768, "Topdown game");
 Raylib.SetTargetFPS(60);
@@ -12,10 +9,13 @@ float speed = 4.5f;
 Texture2D avatarImage = Raylib.LoadTexture("avatar.png");
 
 Rectangle character = new Rectangle(0, 60, avatarImage.width, avatarImage.height);
-Rectangle trapRect = new Rectangle(700, 500, 64, 64);
+Rectangle enemyRect = new Rectangle(700, 500, 64, 64);
 //                        r   g    b   a
 Color myColor = new Color(0, 200, 30, 255);
 string currentScene = "start"; // start, game, win, gameover
+
+Vector2 enemyMovement = new Vector2(1, 0);
+float enemySpeed = 2;
 
 while (Raylib.WindowShouldClose() == false)
 {
@@ -40,7 +40,19 @@ while (Raylib.WindowShouldClose() == false)
       character.y -= speed;
     }
 
-    if (Raylib.CheckCollisionRecs(character, trapRect))
+    Vector2 playerPos = new Vector2(character.x, character.y);
+    Vector2 enemyPos = new Vector2(enemyRect.x, enemyRect.y);
+
+    Vector2 diff = playerPos - enemyPos;
+
+    Vector2 enemyDirection = Vector2.Normalize(diff);
+
+    enemyMovement = enemyDirection * enemySpeed;
+
+    enemyRect.x += enemyMovement.X;
+    enemyRect.y += enemyMovement.Y;
+
+    if (Raylib.CheckCollisionRecs(character, enemyRect))
     {
       currentScene = "gameover";
     }
@@ -66,7 +78,7 @@ while (Raylib.WindowShouldClose() == false)
             Color.WHITE
           );
 
-    Raylib.DrawRectangleRec(trapRect, Color.RED);
+    Raylib.DrawRectangleRec(enemyRect, Color.RED);
   }
   else if (currentScene == "start")
   {
